@@ -1,7 +1,8 @@
 import { supabase } from "./supabase";
+import { Entity, GroupTotals, Alert, Activity, Project } from "../types";
 
 export const api = {
-  async getEntities() {
+  async getEntities(): Promise<Entity[]> {
     try {
       const { data, error } = await supabase
         .from("entities")
@@ -11,16 +12,15 @@ export const api = {
         .order("name");
 
       if (error) throw error;
-      return data || [];
+      return (data as any) || [];
     } catch (error) {
       console.error("Failed to fetch entities:", error);
       return [];
     }
   },
 
-  async getGroupTotals() {
+  async getGroupTotals(): Promise<GroupTotals | null> {
     try {
-      console.log("Fetching group totals from Supabase...");
       const { data, error } = await supabase
         .from("group_totals")
         .select(
@@ -28,24 +28,16 @@ export const api = {
         )
         .limit(1);
 
-      console.log("Supabase response:", { data, error });
+      if (error) throw error;
 
-      if (error) {
-        console.error("Supabase error:", error);
-        throw error;
-      }
-
-      // Return the first record or null if no data
-      const totals = data && data.length > 0 ? data[0] : null;
-      console.log("Group totals data:", totals);
-      return totals;
+      return data && data.length > 0 ? (data[0] as any) : null;
     } catch (error) {
       console.error("Failed to fetch group totals:", error);
       return null;
     }
   },
 
-  async getAlerts() {
+  async getAlerts(): Promise<Alert[]> {
     try {
       const { data, error } = await supabase
         .from("alerts")
@@ -53,14 +45,14 @@ export const api = {
         .order("created_at", { ascending: false });
 
       if (error) throw error;
-      return data || [];
+      return (data as any) || [];
     } catch (error) {
       console.error("Failed to fetch alerts:", error);
       return [];
     }
   },
 
-  async getActivity() {
+  async getActivity(): Promise<Activity[]> {
     try {
       const { data, error } = await supabase
         .from("activity")
@@ -69,24 +61,24 @@ export const api = {
         .limit(10);
 
       if (error) throw error;
-      return data || [];
+      return (data as any) || [];
     } catch (error) {
       console.error("Failed to fetch activity:", error);
       return [];
     }
   },
 
-  async getProjects() {
+  async getProjects(): Promise<Project[]> {
     try {
       const { data, error } = await supabase
         .from("projects")
         .select(
-          "id, name, entity, category, status, budget, spend, remaining, complete, due as dueDate, lead",
+          "id, name, entity, category, status, budget, spend, remaining, complete, due, lead",
         )
         .order("due");
 
       if (error) throw error;
-      return data || [];
+      return (data as any) || [];
     } catch (error) {
       console.error("Failed to fetch projects:", error);
       return [];
@@ -105,7 +97,6 @@ export const api = {
   },
 
   async generateReport(template: string) {
-    // Simulate report generation (in a real app, this might trigger a Supabase Edge Function)
     await new Promise((resolve) => setTimeout(resolve, 2000));
     return {
       success: true,

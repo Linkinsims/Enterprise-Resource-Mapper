@@ -14,9 +14,10 @@ const Sidebar = ({ onViewChange, entities }: SidebarProps) => {
       label: "Overview",
       items: [
         { key: "command-center", label: "Command Center" },
-        { key: "portfolio-health", label: "Portfolio Health" },
-        { key: "consolidated-pl", label: "Consolidated P&L" },
-        { key: "group-alerts", label: "Group Alerts", badge: alertCount },
+        { key: "entities", label: "Entities" },
+        { key: "financials", label: "Financials" },
+        { key: "operations", label: "Operations" },
+        { key: "reports", label: "Reports" },
       ],
     },
     {
@@ -53,9 +54,9 @@ const Sidebar = ({ onViewChange, entities }: SidebarProps) => {
               className="w-full text-left px-5 py-2 hover:bg-bg-elevated transition-colors text-sm"
             >
               {item.label}
-              {item.badge && (
+              {item.key === "group-alerts" && alertCount > 0 && (
                 <span className="ml-2 bg-negative text-text-primary text-[10px] px-1.5 py-0.5 rounded">
-                  {item.badge}
+                  {alertCount}
                 </span>
               )}
             </button>

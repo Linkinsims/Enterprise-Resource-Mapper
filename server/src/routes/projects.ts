@@ -8,7 +8,7 @@ router.get("/", async (req, res) => {
     const { data, error } = await supabase
       .from("projects")
       .select("*")
-      .order("due_date");
+      .order("due");
 
     if (error) throw error;
     res.json(data);
